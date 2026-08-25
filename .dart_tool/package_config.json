@@ -8,6 +8,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "bloc",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/bloc-9.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "boolean_selector",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/boolean_selector-2.1.2",
       "packageUri": "lib/",
@@ -38,6 +44,12 @@
       "languageVersion": "3.9"
     },
     {
+      "name": "cupertino_ui",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/cupertino_ui-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    },
+    {
       "name": "fake_async",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/fake_async-1.3.3",
       "packageUri": "lib/",
@@ -50,16 +62,46 @@
       "languageVersion": "3.10"
     },
     {
+      "name": "flutter_bloc",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/flutter_bloc-9.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/flutter_lints-6.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.8"
     },
     {
+      "name": "flutter_localizations",
+      "rootUri": "file:///Users/heshan/fvm/versions/stable/packages/flutter_localizations",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/heshan/fvm/versions/stable/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.10"
+    },
+    {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///Users/heshan/fvm/versions/stable/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "go_router",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/go_router-18.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    },
+    {
+      "name": "intl",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/intl-0.20.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "leak_tracker",
@@ -86,6 +128,12 @@
       "languageVersion": "3.8"
     },
     {
+      "name": "logging",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/logging-1.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/matcher-0.12.19",
       "packageUri": "lib/",
@@ -98,16 +146,34 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "material_ui",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/material_ui-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.12"
+    },
+    {
       "name": "meta",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/meta-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/path-1.9.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///Users/heshan/.pub-cache/hosted/pub.dev/provider-6.1.5+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "sky_engine",
