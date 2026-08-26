@@ -35,4 +35,6 @@ class AuthRepository {
     var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
     return User(name: decodedResponse['username']);
   }
+
+  Future logout() => _storage.purge();
 }
