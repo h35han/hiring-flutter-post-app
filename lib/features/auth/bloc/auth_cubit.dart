@@ -1,5 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_post_app/features/auth/data/auth_repository.dart';
+
+import '../data/auth_repository.dart';
+import '../data/models/user_model.dart';
 
 part 'auth_state.dart';
 
@@ -8,11 +11,32 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this._repository) : super(InitialAuthState());
 
-  void login() {
-    emit(LoggedInAuthState());
+  void login({required String name, required String password}) async {
+    emit(LoadingAuthState());
+
+    try {
+      var user = await _repository.login(name, password);
+      emit(AuthenticatedAuthState(user));
+    } catch (error) {
+      emit(FailedAuthState(error.toString()));
+    }
   }
 
   void logout() {
     emit(InitialAuthState());
+  }
+
+  void sync() async {
+    emit(LoadingAuthState());
+
+    try {
+      var active = await _repository.isSessionActive();
+      if (active) {
+        var user = await _repository.getUser();
+        emit(AuthenticatedAuthState(user));
+      }
+    } catch (error) {
+      emit(FailedAuthState(error.toString()));
+    }
   }
 }

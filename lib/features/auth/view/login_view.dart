@@ -11,7 +11,19 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          children: [FilledButton(onPressed: () => context.read<AuthCubit>().login(), child: Text("Login"))],
+          children: [
+            FilledButton(
+              onPressed: () => context.read<AuthCubit>().login(name: "emilys", password: "emilyspass"),
+              child: Text("Login"),
+            ),
+            BlocBuilder<AuthCubit, AuthState>(
+              builder: (context, state) => switch (state) {
+                AuthenticatedAuthState(:final user) => Text(user.name),
+                FailedAuthState(:final message) => Text(message),
+                _ => SizedBox.shrink(),
+              },
+            ),
+          ],
         ),
       ),
     );
