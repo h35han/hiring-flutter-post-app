@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_post_app/core/config/app_config.dart';
 import 'package:flutter_post_app/core/storage/secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,10 +19,15 @@ class AuthRepository {
 
   Future<User> login(String name, String password) async {
     var response = await _client.post(
-      Uri.https('dummyjson.com', 'auth/login'),
+      Uri.parse('${AppConfig.baseUrl}/auth/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'username': name, 'password': password, 'expiresInMins': 30}),
     );
+
+    if (response.statusCode == HttpStatus.unauthorized) {
+      throw UnauthorizedException();
+    }
+
     var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
     _storage.write('access_token', decodedResponse['accessToken']);
     return User(name: decodedResponse['username']);
@@ -30,7 +36,7 @@ class AuthRepository {
   Future<User> getUser() async {
     var token = await getCachedToken();
     var response = await _client.get(
-      Uri.https('dummyjson.com', 'auth/me'),
+      Uri.parse('${AppConfig.baseUrl}/auth/me'),
       headers: {'Content-Type': 'application/json', "Authorization": 'Bearer $token'},
     );
 
