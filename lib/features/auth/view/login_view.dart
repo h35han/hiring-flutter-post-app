@@ -16,7 +16,10 @@ class LoginScreen extends StatelessWidget {
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) => switch (state) {
                 LoadingAuthState() => Text('Loading...'),
-                FailedAuthState(:final message) => Text(message),
+                FailedAuthState(:final message) => Text(
+                  message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
                 _ => SizedBox.shrink(),
               },
             ),
