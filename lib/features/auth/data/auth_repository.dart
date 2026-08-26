@@ -21,7 +21,7 @@ class AuthRepository {
     var response = await _client.post(
       Uri.parse('${AppConfig.baseUrl}/auth/login'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'username': name, 'password': password, 'expiresInMins': 30}),
+      body: jsonEncode({'username': name, 'password': password, 'expiresInMins': 60}),
     );
 
     if (response.statusCode == HttpStatus.unauthorized) {
