@@ -41,7 +41,9 @@ class AuthCubit extends Cubit<AuthState> {
         var user = await _repository.getUser();
         emit(AuthenticatedAuthState(user));
       }
-    } catch (error) {
+    } on UnauthorizedException {
+      emit(UnauthenticatedAuthState());
+    } on Exception catch (error) {
       emit(FailedAuthState(error.toString()));
     }
   }
