@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_post_app/features/auth/bloc/auth_cubit.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/storage/secure_storage.dart';
+import 'features/auth/bloc/auth_cubit.dart';
 import 'features/auth/data/auth_repository.dart';
 import 'router.dart';
+import 'ui/theme.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -19,7 +20,9 @@ class App extends StatelessWidget {
       providers: [RepositoryProvider<AuthRepository>(create: (_) => AuthRepository(storage, client))],
       child: MultiBlocProvider(
         providers: [BlocProvider(create: (context) => AuthCubit(context.read<AuthRepository>())..sync())],
-        child: Builder(builder: (context) => MaterialApp.router(routerConfig: buildRouter(context))),
+        child: Builder(
+          builder: (context) => MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(context)),
+        ),
       ),
     );
   }

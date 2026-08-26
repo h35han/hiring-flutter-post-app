@@ -12,10 +12,7 @@ class LoginScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            FilledButton(
-              onPressed: () => context.read<AuthCubit>().login(name: "emilys", password: "emilyspass"),
-              child: Text("Login"),
-            ),
+            Padding(padding: const EdgeInsets.symmetric(horizontal: 18), child: LoginForm()),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) => switch (state) {
                 AuthenticatedAuthState(:final user) => Text(user.name),
@@ -25,6 +22,103 @@ class LoginScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _rememberMe = false;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            controller: _usernameController,
+            decoration: const InputDecoration(labelText: 'Username'),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter your username';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+
+          TextFormField(
+            controller: _passwordController,
+            obscureText: _obscurePassword,
+            decoration: InputDecoration(
+              filled: true,
+              labelText: 'Password',
+              suffixIcon: IconButton(
+                iconSize: 18,
+                icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() => _obscurePassword = !_obscurePassword);
+                },
+              ),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your password';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Checkbox(
+                    value: _rememberMe,
+                    onChanged: (value) {
+                      setState(() => _rememberMe = value ?? false);
+                    },
+                  ),
+                  Text('Remember me', style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+                ],
+              ),
+              Text('Forgot password?', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          FilledButton(
+            onPressed: () => {
+              if (_formKey.currentState!.validate())
+                context.read<AuthCubit>().login(name: _usernameController.text, password: _passwordController.text),
+            },
+            child: Text("Login"),
+          ),
+        ],
       ),
     );
   }
