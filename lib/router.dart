@@ -10,7 +10,10 @@ import "features/dashboard/view/dashboard_screen.dart";
 GoRouter buildRouter(BuildContext context) {
   return GoRouter(
     refreshListenable: StreamListenable(context.read<AuthCubit>().stream),
-    redirect: (ctx, tate) => context.read<AuthCubit>().state is AuthenticatedAuthState ? "/dashboard" : "/login",
+    redirect: (ctx, tate) => switch (context.read<AuthCubit>().state) {
+      AuthenticatedAuthState() => '/dashboard',
+      _ => '/login',
+    },
     routes: [
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/dashboard', builder: (_, __) => const DashboardScreen()),
