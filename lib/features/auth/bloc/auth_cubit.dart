@@ -38,6 +38,7 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       var active = await _repository.isSessionActive();
       if (active) {
+        emit(LoadingAuthState());
         var user = await _repository.getUser();
         emit(AuthenticatedAuthState(user));
       }
