@@ -12,6 +12,15 @@ class LoginScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
+            SizedBox(height: 38),
+            Text(
+              "Welcome Back",
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 38),
             Padding(padding: const EdgeInsets.symmetric(horizontal: 18), child: LoginForm()),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) => switch (state) {
