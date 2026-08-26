@@ -18,22 +18,22 @@ class AuthCubit extends Cubit<AuthState> {
       var user = await _repository.login(name, password);
       emit(AuthenticatedAuthState(user));
     } catch (error) {
-      emit(FailedAuthState(error.toString()));
+      emit(FailedAuthState("Authentication failed"));
     }
   }
 
   void logout() async {
-    emit(LoadingAuthState());
+    emit(UnauthenticatedAuthState());
 
     try {
       await _repository.logout();
     } catch (error) {
-      emit(UnauthenticatedAuthState());
+      emit(FailedAuthState("Authentication failed"));
     }
   }
 
   void sync() async {
-    emit(LoadingAuthState());
+    emit(UnauthenticatedAuthState());
 
     try {
       var active = await _repository.isSessionActive();
@@ -43,8 +43,8 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } on UnauthorizedException {
       emit(UnauthenticatedAuthState());
-    } on Exception catch (error) {
-      emit(FailedAuthState(error.toString()));
+    } catch (error) {
+      emit(FailedAuthState("Authentication failed"));
     }
   }
 }

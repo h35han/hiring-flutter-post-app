@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
             Padding(padding: const EdgeInsets.symmetric(horizontal: 18), child: LoginForm()),
             BlocBuilder<AuthCubit, AuthState>(
               builder: (context, state) => switch (state) {
-                AuthenticatedAuthState(:final user) => Text(user.name),
+                LoadingAuthState() => Text('Loading...'),
                 FailedAuthState(:final message) => Text(message),
                 _ => SizedBox.shrink(),
               },
