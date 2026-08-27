@@ -12,9 +12,9 @@ class DashboardRepository {
 
   DashboardRepository(this._sessionHandler, this._client);
 
-  Future<List<Post>> fetchRecentPosts() async {
+  Future<List<Post>> fetchRecentPosts({int? offset = 0}) async {
     var response = await _client.get(
-      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=id&order=desc&limit=10'),
+      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=id&order=desc&skip=$offset&limit=${AppConfig.paginationLimit}'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -25,9 +25,9 @@ class DashboardRepository {
     return [];
   }
 
-  Future<List<Post>> fetchFeaturedPosts() async {
+  Future<List<Post>> fetchFeaturedPosts({int? offset = 0}) async {
     var response = await _client.get(
-      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=views&order=desc&limit=10'),
+      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=views&skip=$offset&order=desc&limit=${AppConfig.paginationLimit}'),
       headers: {'Content-Type': 'application/json'},
     );
 

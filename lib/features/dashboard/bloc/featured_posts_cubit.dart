@@ -11,10 +11,10 @@ class FeaturedPostsCubit extends Cubit<FeaturedPostsState> {
 
   final DashboardRepository _repository;
 
-  Future<void> load() async {
+  Future<void> load({int? offset = 0}) async {
     emit(state.copyWith(status: FeaturedPostsStatus.loading));
     try {
-      final posts = await _repository.fetchFeaturedPosts();
+      final posts = await _repository.fetchFeaturedPosts(offset: offset);
       emit(state.copyWith(status: FeaturedPostsStatus.success, posts: posts));
     } catch (error) {
       emit(state.copyWith(status: FeaturedPostsStatus.failure, errorMessage: error.toString()));
