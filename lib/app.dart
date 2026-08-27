@@ -22,8 +22,7 @@ class App extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [BlocProvider(create: (context) => AuthCubit(context.read<AuthRepository>())..sync())],
         child: Builder(
-          builder: (context) =>
-              MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(context, sessionHandler)),
+          builder: (context) => MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(sessionHandler)),
         ),
       ),
     );

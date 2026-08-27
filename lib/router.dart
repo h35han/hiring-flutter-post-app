@@ -1,4 +1,3 @@
-import "package:flutter/widgets.dart";
 import "package:go_router/go_router.dart";
 
 import "core/session/session_handler.dart";
@@ -6,7 +5,7 @@ import "core/util/stream_listenable.dart";
 import "features/auth/view/login_view.dart";
 import "features/dashboard/view/dashboard_screen.dart";
 
-GoRouter buildRouter(BuildContext context, SessionHandler sessionHandler) {
+GoRouter buildRouter(SessionHandler sessionHandler) {
   return GoRouter(
     refreshListenable: StreamListenable(sessionHandler.stream),
     redirect: (ctx, tate) => switch (sessionHandler.state.status) {
