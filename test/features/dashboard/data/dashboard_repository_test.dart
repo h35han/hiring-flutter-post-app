@@ -47,6 +47,27 @@ void main() {
     });
   });
 
+  group('searchPosts', () {
+    test('returnsMatchingPosts', () async {
+      httpStub.stubGet('posts/search', jsonResponse(postsBody([postJson(id: 3), postJson(id: 7)])));
+
+      final posts = await repo.searchPosts('phone');
+
+      expect(posts, hasLength(2));
+      expect(posts[0].id, 3);
+    });
+
+    test('sendsCorrectQueryParams', () async {
+      httpStub.stubGet('posts/search', jsonResponse(postsBody([])));
+
+      await repo.searchPosts('laptop', offset: 10);
+
+      final uri = httpStub.requests.first.uri;
+      expect(uri.queryParameters['q'], 'laptop');
+      expect(uri.queryParameters['skip'], '10');
+    });
+  });
+
   group('fetchFeaturedPosts', () {
     test('returnsPostsSortedByViews', () async {
       httpStub.stubGet('posts', jsonResponse(postsBody([postJson(id: 10)])));

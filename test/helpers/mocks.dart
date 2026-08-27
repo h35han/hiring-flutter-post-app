@@ -120,16 +120,20 @@ class FakeAuthRepository extends AuthRepository {
 class FakeDashboardRepository extends DashboardRepository {
   List<Post> _recentPosts = [];
   List<Post> _featuredPosts = [];
+  List<Post> _searchedPosts = [];
   Object? _recentError;
   Object? _featuredError;
+  Object? _searchError;
 
   FakeDashboardRepository()
     : super(SessionHandler(FakeSecureStorage()), http_testing.MockClient((_) async => http.Response('{}', 200)));
 
   void setRecentPosts(List<Post> posts) => _recentPosts = posts;
   void setFeaturedPosts(List<Post> posts) => _featuredPosts = posts;
+  void setSearchedPosts(List<Post> posts) => _searchedPosts = posts;
   void whenRecentPostsThrows(Object error) => _recentError = error;
   void whenFeaturedPostsThrows(Object error) => _featuredError = error;
+  void whenSearchPostsThrows(Object error) => _searchError = error;
 
   @override
   Future<List<Post>> fetchRecentPosts({int? offset = 0}) async {
@@ -149,5 +153,15 @@ class FakeDashboardRepository extends DashboardRepository {
       throw e;
     }
     return _featuredPosts;
+  }
+
+  @override
+  Future<List<Post>> searchPosts(String query, {int? offset = 0}) async {
+    if (_searchError != null) {
+      final e = _searchError!;
+      _searchError = null;
+      throw e;
+    }
+    return _searchedPosts;
   }
 }

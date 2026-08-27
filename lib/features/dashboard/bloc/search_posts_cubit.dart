@@ -22,7 +22,7 @@ class SearchPostsCubit extends Cubit<SearchPostsState> {
     emit(state.copyWith(query: query));
 
     if (query.trim().isEmpty) {
-      emit(state.copyWith(status: SearchPostsStatus.idle, results: const []));
+      emit(state.copyWith(status: SearchPostsStatus.idle, posts: const []));
       return;
     }
 
@@ -34,9 +34,9 @@ class SearchPostsCubit extends Cubit<SearchPostsState> {
 
     emit(state.copyWith(status: SearchPostsStatus.loading));
     try {
-      final results = await _repository.searchPosts(query);
+      final posts = await _repository.searchPosts(query);
       if (query != state.query) return;
-      emit(state.copyWith(status: SearchPostsStatus.success, results: results));
+      emit(state.copyWith(status: SearchPostsStatus.success, posts: posts));
     } catch (e) {
       if (query != state.query) return;
       emit(state.copyWith(status: SearchPostsStatus.failure, errorMessage: e.toString()));

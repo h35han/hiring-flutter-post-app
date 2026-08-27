@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_post_app/features/dashboard/bloc/search_posts_cubit.dart';
 import 'package:flutter_post_app/ui/organisms/post_cards.dart';
 
 import '../bloc/featured_posts_cubit.dart';
@@ -32,27 +33,60 @@ class DashboardView extends StatelessWidget {
               ),
             ),
             SearchBar(),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await Future.wait([
-                    context.read<FeaturedPostsCubit>().refresh(),
-                    context.read<RecentPostsCubit>().refresh(),
-                  ]);
-                },
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: SectionHeader(title: "Featured Posts", onViewMore: () {}),
+            BlocBuilder<SearchPostsCubit, SearchPostsState>(
+              builder: (context, state) {
+                if (state.posts.isNotEmpty) {
+                  return Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate((context, index) {
+                              var post = state.posts[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: VerticalPostCard(
+                                  title: post.title,
+                                  content: post.body,
+                                  author: post.userId.toString(),
+                                  hearts: post.likes,
+                                ),
+                              );
+                            }, childCount: state.posts.length),
+                          ),
+                        ),
+                      ],
                     ),
-                    SliverToBoxAdapter(child: SizedBox(height: 240, child: FeaturedPostsSection())),
-                    SliverToBoxAdapter(
-                      child: SectionHeader(title: "Recent Posts", onViewMore: () {}),
+                  );
+                }
+
+                return Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await Future.wait([
+                        context.read<FeaturedPostsCubit>().refresh(),
+                        context.read<RecentPostsCubit>().refresh(),
+                      ]);
+                    },
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: SectionHeader(title: "Featured Posts", onViewMore: () {}),
+                        ),
+                        SliverToBoxAdapter(child: SizedBox(height: 240, child: FeaturedPostsSection())),
+                        SliverToBoxAdapter(
+                          child: SectionHeader(title: "Recent Posts", onViewMore: () {}),
+                        ),
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          sliver: RecentPostsSection(),
+                        ),
+                      ],
                     ),
-                    SliverPadding(padding: const EdgeInsets.symmetric(horizontal: 18), sliver: RecentPostsSection()),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -69,6 +103,9 @@ class SearchBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
+        onChanged: (query) {
+          context.read<SearchPostsCubit>().onQueryChanged(query);
+        },
         maxLines: 1,
         decoration: InputDecoration(
           prefixIconColor: Theme.of(context).colorScheme.secondary,
