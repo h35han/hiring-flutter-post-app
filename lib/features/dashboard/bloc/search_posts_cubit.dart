@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_post_app/core/config/app_config.dart';
 
 import '../data/dashboard_repository.dart';
 import '../data/models/post_model.dart';
@@ -14,7 +15,7 @@ class SearchPostsCubit extends Cubit<SearchPostsState> {
   final DashboardRepository _repository;
   Timer? _debounce;
 
-  static const _debounceDuration = Duration(milliseconds: 400);
+  static final _debounceDuration = Duration(milliseconds: AppConfig.searchDebounceMs);
 
   void onQueryChanged(String query) {
     _debounce?.cancel();
