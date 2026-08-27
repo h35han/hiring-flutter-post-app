@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_post_app/features/auth/data/auth_repository.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -28,7 +26,6 @@ class DashboardView extends StatelessWidget {
                 ],
               ),
             ),
-            TextButton(onPressed: () => context.read<AuthRepository>().logout(), child: Text("logout")),
             SearchBar(),
             Expanded(
               child: CustomScrollView(
