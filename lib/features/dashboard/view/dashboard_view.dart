@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_post_app/features/auth/bloc/auth_cubit.dart';
 import 'package:flutter_post_app/features/dashboard/bloc/search_posts_cubit.dart';
 import 'package:flutter_post_app/ui/organisms/post_cards.dart';
 
@@ -28,7 +29,16 @@ class DashboardView extends StatelessWidget {
                     "Good Morning!",
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  CircleAvatar(),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => context.read<AuthCubit>().logout(),
+                        icon: Icon(Icons.logout_rounded, size: 18),
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      CircleAvatar(),
+                    ],
+                  ),
                 ],
               ),
             ),
