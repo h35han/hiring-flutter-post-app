@@ -7,5 +7,7 @@ class SecureStorage {
 
   Future<void> write(String key, String data) => _storage.write(key: key, value: data);
 
+  Future<void> delete(String key) => _storage.delete(key: key);
+
   Future<dynamic> purge() => _storage.deleteAll();
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
+import 'core/session/session_handler.dart';
 import 'core/storage/secure_storage.dart';
 import 'features/auth/bloc/auth_cubit.dart';
 import 'features/auth/data/auth_repository.dart';
@@ -11,17 +12,18 @@ import 'ui/theme.dart';
 class App extends StatelessWidget {
   const App({super.key});
 
-  static final storage = SecureStorage();
+  static final sessionHandler = SessionHandler(SecureStorage());
   static final client = http.Client();
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [RepositoryProvider<AuthRepository>(create: (_) => AuthRepository(storage, client))],
+      providers: [RepositoryProvider<AuthRepository>(create: (_) => AuthRepository(sessionHandler, client))],
       child: MultiBlocProvider(
         providers: [BlocProvider(create: (context) => AuthCubit(context.read<AuthRepository>())..sync())],
         child: Builder(
-          builder: (context) => MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(context)),
+          builder: (context) =>
+              MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(context, sessionHandler)),
         ),
       ),
     );
