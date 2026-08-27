@@ -8,7 +8,7 @@ import "features/dashboard/view/dashboard_screen.dart";
 GoRouter buildRouter(SessionHandler sessionHandler) {
   return GoRouter(
     refreshListenable: StreamListenable(sessionHandler.stream),
-    redirect: (ctx, tate) => switch (sessionHandler.state.status) {
+    redirect: (_, __) => switch (sessionHandler.state.status) {
       SessionStatus.authenticated => '/dashboard',
       _ => '/login',
     },
