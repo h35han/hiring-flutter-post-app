@@ -37,4 +37,17 @@ class DashboardRepository {
     if (posts is List) return posts.map((data) => Post.fromJson(data)).toList();
     return [];
   }
+
+  Future<List<Post>> searchPosts(String query, {int? offset = 0}) async {
+    var response = await _client.get(
+      Uri.parse('${AppConfig.baseUrl}/posts/search?q=$query&skip=$offset&limit=${AppConfig.paginationLimit}'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    var posts = decodedResponse["posts"];
+
+    if (posts is List) return posts.map((data) => Post.fromJson(data)).toList();
+    return [];
+  }
 }
