@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_post_app/features/dashboard/bloc/featured_posts_cubit.dart';
 
+import '../bloc/featured_posts_cubit.dart';
 import '../bloc/recent_posts_cubit.dart';
 
 class DashboardView extends StatelessWidget {
