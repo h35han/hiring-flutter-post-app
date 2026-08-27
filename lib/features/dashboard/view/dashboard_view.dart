@@ -67,9 +67,13 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: const TextField(
+      child: TextField(
         maxLines: 1,
         decoration: InputDecoration(
+          prefixIconColor: Theme.of(context).colorScheme.secondary,
+          prefixIcon: Icon(Icons.search),
+          hintText: "Search posts ...",
+          hintStyle: TextStyle(color: Theme.of(context).colorScheme.secondary),
           border: ShapedInputBorder(shape: StadiumBorder(), borderSide: BorderSide.none),
           isDense: true,
         ),
