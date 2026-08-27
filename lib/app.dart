@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_post_app/features/dashboard/data/dashboard_repository.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/session/session_handler.dart';
@@ -18,7 +19,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
-      providers: [RepositoryProvider<AuthRepository>(create: (_) => AuthRepository(sessionHandler, client))],
+      providers: [
+        RepositoryProvider<AuthRepository>(create: (_) => AuthRepository(sessionHandler, client)),
+        RepositoryProvider<DashboardRepository>(create: (_) => DashboardRepository(sessionHandler, client)),
+      ],
       child: MultiBlocProvider(
         providers: [BlocProvider(create: (context) => AuthCubit(context.read<AuthRepository>())..sync())],
         child: MaterialApp.router(theme: appThemeData, routerConfig: buildRouter(sessionHandler)),

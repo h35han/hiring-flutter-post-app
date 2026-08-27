@@ -1,7 +1,40 @@
+import 'dart:convert';
+
+import 'package:flutter_post_app/core/config/app_config.dart';
+import 'package:flutter_post_app/core/session/session_handler.dart';
 import 'package:http/http.dart' as http;
 
+import 'models/post_model.dart';
+
 class DashboardRepository {
+  final SessionHandler _sessionHandler;
   final http.Client _client;
 
-  DashboardRepository(this._client);
+  DashboardRepository(this._sessionHandler, this._client);
+
+  Future<List<Post>> fetchRecentPosts() async {
+    var response = await _client.get(
+      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=id&order=desc&limit=10'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    var posts = decodedResponse["posts"];
+
+    if (posts is List) return posts.map((data) => Post.fromJson(data)).toList();
+    return [];
+  }
+
+  Future<List<Post>> fetchFeaturedPosts() async {
+    var response = await _client.get(
+      Uri.parse('${AppConfig.baseUrl}/posts?sortBy=views&order=desc&limit=10'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
+    var posts = decodedResponse["posts"];
+
+    if (posts is List) return posts.map((data) => Post.fromJson(data)).toList();
+    return [];
+  }
 }

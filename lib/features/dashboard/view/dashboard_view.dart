@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_post_app/features/dashboard/bloc/featured_posts_cubit.dart';
+
+import '../bloc/recent_posts_cubit.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -28,17 +32,25 @@ class DashboardView extends StatelessWidget {
             ),
             SearchBar(),
             Expanded(
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: SectionHeader(title: "Featured Posts", onViewMore: () {}),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height: 240, child: FeaturedPostsSection())),
-                  SliverToBoxAdapter(
-                    child: SectionHeader(title: "Recent Posts", onViewMore: () {}),
-                  ),
-                  SliverPadding(padding: const EdgeInsets.symmetric(horizontal: 18), sliver: RecentPostsSection()),
-                ],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await Future.wait([
+                    context.read<FeaturedPostsCubit>().refresh(),
+                    context.read<RecentPostsCubit>().refresh(),
+                  ]);
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SectionHeader(title: "Featured Posts", onViewMore: () {}),
+                    ),
+                    SliverToBoxAdapter(child: SizedBox(height: 240, child: FeaturedPostsSection())),
+                    SliverToBoxAdapter(
+                      child: SectionHeader(title: "Recent Posts", onViewMore: () {}),
+                    ),
+                    SliverPadding(padding: const EdgeInsets.symmetric(horizontal: 18), sliver: RecentPostsSection()),
+                  ],
+                ),
               ),
             ),
           ],
@@ -92,16 +104,23 @@ class FeaturedPostsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      itemCount: 10,
-      separatorBuilder: (_, __) => const SizedBox(width: 12),
-      itemBuilder: (context, index) => FeaturedPostCard(
-        title: "10 Tips for Better iO Development Better iO Development",
-        author: "John Doe",
-        hearts: 142,
-      ),
+    return BlocBuilder<FeaturedPostsCubit, FeaturedPostsState>(
+      builder: (context, state) {
+        if (state.errorMessage != null) {
+          return Text(state.errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error));
+        }
+
+        return ListView.separated(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          itemCount: state.posts.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 12),
+          itemBuilder: (context, index) {
+            var post = state.posts[index];
+            return FeaturedPostCard(title: post.title, author: post.userId.toString(), hearts: post.likes);
+          },
+        );
+      },
     );
   }
 }
@@ -179,18 +198,27 @@ class RecentPostsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: RecentPostCard(
-            title: "Understanding SwiftData Architecture",
-            content: "Learn how to implement SwiftData in your iOS applications with practical examples",
-            author: "Alice Miller",
-            hearts: 142,
-          ),
+    return BlocBuilder<RecentPostsCubit, RecentPostsState>(
+      builder: (context, state) {
+        if (state.errorMessage != null) {
+          return Text(state.errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error));
+        }
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            var post = state.posts[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: RecentPostCard(
+                title: post.title,
+                content: post.body,
+                author: post.userId.toString(),
+                hearts: post.likes,
+              ),
+            );
+          }, childCount: state.posts.length),
         );
-      }, childCount: 10),
+      },
     );
   }
 }
